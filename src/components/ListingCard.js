@@ -1,21 +1,34 @@
 import React from "react";
 
-function ListingCard() {
+function ListingCard(props) {
+  const [favorited, setFavorited] = React.useState(false)
+
+  function toggle(){
+    setFavorited(prevState => !prevState)
+  }
+
+  function deleteListing(){
+    fetch(`http://localhost:6001/listings/${props.id}`, {
+      method: "DELETE"
+    })
+    .then(props.changeMe = !props.changeMe)
+  }
+
   return (
     <li className="card">
       <div className="image">
         <span className="price">$0</span>
-        <img src={"https://via.placeholder.com/300x300"} alt={"description"} />
+        <img src={props.image} alt={props.description} />
       </div>
       <div className="details">
-        {true ? (
-          <button className="emoji-button favorite active">★</button>
+        {favorited ? (
+          <button onClick={toggle} className="emoji-button favorite active">★</button>
         ) : (
-          <button className="emoji-button favorite">☆</button>
+          <button onClick={toggle} className="emoji-button favorite">☆</button>
         )}
-        <strong>{"description"}</strong>
-        <span> · {"location"}</span>
-        <button className="emoji-button delete">🗑</button>
+        <strong>{props.description}</strong>
+        <span> · {props.location}</span>
+        <button onClick={deleteListing} className="emoji-button delete">🗑</button>
       </div>
     </li>
   );
